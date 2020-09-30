@@ -20,18 +20,16 @@ const CameraComponent = (props) => {
   console.log(hasPermission)
 
   if (hasPermission === null) {
-    console.log('is null')
-    return <Text>Idk what is happening</Text>;
+    return <Text></Text>;
   } else if (hasPermission === false) {
-    console.log('is null')
-    return <Text>No access to camera</Text>;
+    return <Text>No permissions to access the camera</Text>;
   }
-  
-    return (
-        <View style={{height: '100%'}}>
-          <Camera style={{ flex: 1 }} type={type} />
-      </View>
-    );
+
+  return (
+    <View style={{ height: '100%' }}>
+      <Camera style={{ flex: 1 }} type={type} />
+    </View>
+  );
 }
 
 export default CameraComponent

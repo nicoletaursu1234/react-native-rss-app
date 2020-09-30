@@ -16,12 +16,12 @@ const FeedNavigator = () => {
       <Feed.Screen
         name='MainFeedScreen'
         component={MainFeedScreen}
-        options={{ ...customOptions, title: 'Memes' }}
+        options={{ ...customOptions}}
       />
       <Feed.Screen
         name='ViewPhotoScreen'
         component={ViewPhotoScreen}
-        options={{ ...customOptions, title: 'View meme' }}
+        options={{ ...customOptions}}
       />
     </Feed.Navigator>
   )

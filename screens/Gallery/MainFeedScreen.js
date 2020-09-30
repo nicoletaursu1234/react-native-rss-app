@@ -1,11 +1,15 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { useState, useEffect, useRef } from 'react'
+import { View, Text, Button, StyleSheet, TextInput } from 'react-native'
+
+import * as Notifications from 'expo-notifications'
+import SearchBar from '../../components/SearchBar'
 
 const MainFeedScreen = props => {
+  
   return (
-    <View>
-      <Text>Some photos</Text>
-    </View>
+  <>
+    <SearchBar />
+  </>
   )
 }
 

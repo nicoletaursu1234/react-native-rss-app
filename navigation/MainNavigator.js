@@ -1,83 +1,34 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Ionicons } from '@expo/vector-icons'
-
-import CameraScreen from '../screens/User/CameraScreen'
-import AddPostNavigator from './AddPostNavigator'
-import FeedNavigator from './FeedNavigator'
-import UserNavigator from './UserNavigator'
-import customOptions from '../constants/navOptions'
-import colors from '../constants/colors'
 import { createStackNavigator } from '@react-navigation/stack'
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
-const Tab = createBottomTabNavigator()
+import TabNavigator from './TabNavigator'
+import UserPhotoScreen from '../screens/User/UserPhotoScreen'
+import CameraScreen from '../screens/User/CameraScreen'
+import customOptions from '../constants/navOptions'
+
 const Main = createStackNavigator()
-
-const TabNavigator = () => {
-  return (
-    <Tab.Navigator
-      initialRouteName={{ FeedNavigator }}
-      tabBarOptions={{
-        activeTintColor: colors.tabTextActive,
-        activeBackgroundColor: '#222',
-        inactiveTintColor: '#999',
-        inactiveBackgroundColor: 'black',
-        labelStyle: { fontSize: 13 },
-        tabStyle: { paddingVertical: 4 },
-        style: { height: 55 }
-      }}
-    >
-      <Tab.Screen
-        name='FeedNavigator'
-        component={FeedNavigator}
-        options={{
-          ...customOptions,
-          title: 'Memes',
-          tabBarIcon: ({ color }) => {
-            return <Ionicons name='md-albums' size={23} color={color} />
-          }
-        }}
-      />
-      <Tab.Screen
-        name='AddPostNavigator'
-        component={AddPostNavigator}
-        options={{
-          ...customOptions,
-          title: 'Add meme',
-          tabBarIcon: ({ color }) => {
-            return <Ionicons name='md-add-circle-outline' size={30} color={color} />
-          }
-        }}
-      />
-      <Tab.Screen
-        name='UserNavigator'
-        component={UserNavigator}
-        options={{
-          ...customOptions,
-          title: 'Profile',
-          tabBarIcon: ({ color }) => {
-            return <Ionicons name='md-person' size={25} color={color} />
-          }
-        }}
-      />
-    </Tab.Navigator>
-  )
-}
 
 const MainNavigator = () => {
   return (
-    <Main.Navigator
-      initialRouteName='TabNavigator'
-    >
+    <Main.Navigator>
       <Main.Screen
-        name='TabNavigator'
+        name='Tab Navigator'
         component={TabNavigator}
-        options={customOptions}
+        options={({ route }) => ({
+          ...customOptions,
+          headerTitle: getHeaderTitle(route),
+        })}
       />
       <Main.Screen
         name='Camera'
         component={CameraScreen}
+        options={{ headerShown: false }}
+      />
+      <Main.Screen
+        name='UserPhoto'
+        component={UserPhotoScreen}
         options={{ headerShown: false }}
       />
     </Main.Navigator>
@@ -90,5 +41,20 @@ const MainNavigatorContainer = (props) => {
       {props.children}
     </NavigationContainer>
   )
+}
+
+
+const getHeaderTitle = (route) => {
+  
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'FeedNavigator';
+
+  switch (routeName) {
+    case 'FeedNavigator':
+      return 'Photos';
+    case 'AddPostNavigator':
+      return 'Add Event';
+    case 'UserNavigator':
+      return 'Profile';
+  }
 }
 export default MainNavigatorContainer

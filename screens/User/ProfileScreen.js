@@ -1,19 +1,86 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Alert, Modal, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import colors from '../../constants/colors'
 
 const ProfileScreen = props => {
+  let photo;
+  const [image, setImage] = useState(null)
+  const [modalVisible, setModalVisible] = useState(false)
+
+  if (props.route.params) {
+    photo = props.route.params.photo
+  }
+
+  useEffect(() => {
+    if (photo !== undefined) {
+      setImage(photo)
+    }
+  }, [photo])
+
   return (
     <View style={styles.screen}>
+      <View style={styles.centeredView} onPress={() => {
+        setModalVisible(false);
+      }}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+        >
+          <View style={styles.centeredView} onPress={() => {
+            setModalVisible(!modalVisible)
+          }}>
+            <View style={styles.modalView}>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.textStyle}>View photo</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={{
+                  ...styles.textStyle,
+                  borderTopWidth: 0.5,
+                  borderTopColor: 'white'
+                }}
+                >
+                  Take new photo
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </View>
+
       <View style={styles.circleWrapper}>
         <View style={styles.circle}>
-          <Ionicons
-            style={styles.cameraIcon}
-            name='md-camera'
-            size={60}
-            color='white'
-            onPress={() => props.navigation.navigate('Camera')}
-          />
+          {(image) ? (
+            <TouchableOpacity
+              style={styles.image}
+              onPress={() => {
+                setTimeout(() => {
+                  setModalVisible(true)
+                }, 10000
+                )
+              }}>
+              <Image source={{ uri: image }} style={styles.image} />
+            </TouchableOpacity>
+          ) : (
+              <Ionicons
+                name='md-camera'
+                size={60}
+                color='white'
+                onPress={() => props.navigation.navigate('Camera')}
+              />
+            )}
+
         </View>
         <Text style={styles.name}>Username</Text>
       </View>
@@ -25,7 +92,26 @@ const styles = StyleSheet.create({
   screen: {
     flexDirection: 'row',
     height: '100%',
-    backgroundColor: '#23264F'
+    backgroundColor: colors.background,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  modalView: {
+    backgroundColor: colors.header,
+    borderRadius: 10,
+    padding: 10,
+    alignItems: "center"
+  },
+  textStyle: {
+    color: 'white',
+    fontSize: 18,
+    backgroundColor: colors.header,
+    paddingHorizontal: 20,
+    paddingVertical: 10
   },
   circleWrapper: {
     height: '35%',
@@ -33,7 +119,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: 'white',
-    borderBottomWidth: 0.3
+    borderBottomWidth: 0.3,
   },
   circle: {
     alignItems: 'center',
@@ -42,10 +128,13 @@ const styles = StyleSheet.create({
     width: 140,
     borderRadius: 70,
     borderColor: 'white',
-    borderWidth: 0.7
+    borderWidth: 0.7,
+    overflow: 'hidden',
   },
-  cameraIcon: {
-
+  image: {
+    flex: 1,
+    height: '100%',
+    width: '100%'
   },
   name: {
     color: 'white',
