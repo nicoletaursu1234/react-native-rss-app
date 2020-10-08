@@ -1,11 +1,32 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet, ImageBackground } from 'react-native'
+import { View, Text, Image, StyleSheet, ImageBackground, PermissionsAndroid, Platform } from 'react-native'
 import { AntDesign, MaterialIcons, Entypo } from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import CameraRoll from "@react-native-community/cameraroll";
 
 const UserPhotoScreen = props => {
   const photo = props.route.params.photo
-  
+
+  const hasAndroidPermission = async () => {
+    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+    const hasPermission = await PermissionsAndroid.check(permission);
+
+    if (hasPermission) {
+      return true;
+    }
+
+    const status = await PermissionsAndroid.request(permission);
+    return status === 'granted';
+
+  }
+
+  const savePic = async () => {
+    if (!await hasAndroidPermission) {
+      return;
+    }
+
+    CameraRoll.save(photo)
+  }
   return (
     <View style={styles.screen}>
       <ImageBackground source={{ uri: photo }} style={styles.image} >
@@ -17,15 +38,23 @@ const UserPhotoScreen = props => {
 
             <TouchableOpacity>
               <MaterialIcons name="check" size={30} color="white"
-                onPress={() => { props.navigation.navigate('ProfileScreen', {
-                  photo: photo
-                })}}/>
+                onPress={() => {
+                  props.navigation.navigate('ProfileScreen', {
+                    photo: photo
+                  })
+                }} />
             </TouchableOpacity>
 
             <TouchableOpacity>
-              <AntDesign name="reload1" size={25} color="white" />
+              <AntDesign
+                name="reload1"
+                size={25}
+                color="white"
+                onPress={() => { props.navigation.goBack() }}
+              />
             </TouchableOpacity>
           </View>
+
           <View style={styles.back}>
             <TouchableOpacity>
               <AntDesign
@@ -36,6 +65,7 @@ const UserPhotoScreen = props => {
               />
             </TouchableOpacity>
           </View>
+
         </View>
       </ImageBackground>
     </View>

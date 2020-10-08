@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Button, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
-
+import { useDispatch } from 'react-redux'
+import * as eventActions from '../../store/actions/events'
 import colors from '../../constants/colors'
 
 const AddEventScreen = props => {
+  const dispatch = useDispatch()
   const selectedDate = props.route.params.selectedDate;
 
   const [date, setDate] = useState(selectedDate)
@@ -13,7 +15,7 @@ const AddEventScreen = props => {
   return (
     <View style={styles.screen}>
       <View style={styles.container}>
-      <Text style={styles.header}>Add new event</Text>
+        <Text style={styles.header}>Add new event</Text>
         <TextInput
           style={styles.eventName}
           value={eventName}
@@ -31,8 +33,15 @@ const AddEventScreen = props => {
         />
         <Text style={styles.date}>Date: {selectedDate}</Text>
         <View style={styles.actions}>
-          <Text style={styles.add}>ADD</Text>
-          <Text style={styles.cancel}>CANCEL</Text>
+          <Text
+            style={styles.add}
+            onPress={() => {
+              dispatch(eventActions.addEvent({eventName, description, date}));
+              props.navigation.goBack();
+            }}>ADD</Text>
+          <Text
+            style={styles.cancel}
+            onPress={() => props.navigation.goBack()}>CANCEL</Text>
         </View>
 
       </View>

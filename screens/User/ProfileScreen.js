@@ -50,6 +50,7 @@ const ProfileScreen = props => {
                   borderTopWidth: 0.5,
                   borderTopColor: 'white'
                 }}
+                onPress={() => {props.navigation.navigate("Camera"); setModalVisible(false)}}
                 >
                   Take new photo
                 </Text>
@@ -67,7 +68,7 @@ const ProfileScreen = props => {
               onPress={() => {
                 setTimeout(() => {
                   setModalVisible(true)
-                }, 10000
+                }, 5000
                 )
               }}>
               <Image source={{ uri: image }} style={styles.image} />

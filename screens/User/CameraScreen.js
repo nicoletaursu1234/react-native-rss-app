@@ -46,6 +46,7 @@ const CameraScreen = props => {
     })
 
     setPhoto(newPath)
+    props.navigation.navigate('UserPhoto', { photo: newPath })
   }
 
   const pickImage = async () => {
@@ -54,14 +55,9 @@ const CameraScreen = props => {
     })
     return image;
   }
-
+  
   return (
     <View style={styles.screen}>
-      {
-        (photo) && (
-          props.navigation.navigate('UserPhoto', { photo: photo })
-        ) 
-      }
 
       <Camera
         style={styles.camera}
@@ -70,8 +66,7 @@ const CameraScreen = props => {
         ratio='4:2'
         ref={ref => {
           setCameraRef(ref)
-        }}
-      >
+        }}>
         <View style={styles.topRow}>
           <TouchableOpacity
             onPress={() => {
