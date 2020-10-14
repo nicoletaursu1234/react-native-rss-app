@@ -8,7 +8,7 @@ import colors from '../constants/colors'
 
 const Event = (props) => {
   const dispatch = useDispatch()
-
+  console.log('props', props.name, props.description, props.date);
   return (
     <View style={styles.container}>
       <View style={styles.info}>
@@ -17,7 +17,13 @@ const Event = (props) => {
         <Text style={styles.date}>{props.date}</Text>
       </View>
       <View style={styles.actions}>
-        <TouchableOpacity >
+        <TouchableOpacity onPress={() => props.navigation.navigate('AddDateEvent', {
+          name: props.name,
+          description: props.description,
+          date: props.date,
+          id: props.id,
+          isEdit: true
+        })}>
           <FontAwesome name='pencil' size={25} color="green" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => { dispatch(eventActions.removeEvent(props.id))}}>

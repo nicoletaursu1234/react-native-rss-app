@@ -1,5 +1,6 @@
 import Event from '../../models/eventSchema'
-import { ADD_EVENT, REMOVE_EVENT, UPDATE_EVENT } from '../actions/events'
+import { GET_EVENTS, ADD_EVENT, REMOVE_EVENT, UPDATE_EVENT } from '../actions/events'
+import { getData, storeData } from '../asyncStorage';
 
 const initialState = {
   events: []
@@ -7,19 +8,37 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case GET_EVENTS: 
+      const localEvents = getData();
+      console.log('local:', localEvents);
+      return {
+        events: [localEvents]
+      }
+
     case ADD_EVENT:
       const event = action.event;
       const newEvent = new Event(event.eventName, event.description, event.date);
-
+      
       return {
-        events: {...state.events, newEvent}
+        ...state,
+        events: [...state.events, newEvent]
       }
 
     case REMOVE_EVENT:
-      const updatedList = { ...state.events }
-      delete updatedList[action.id]
+      return {
+        events: state.events.filter(event => event.id !== action.id)
+      }
 
-    default:
-      return state
-  }
+    case UPDATE_EVENT:
+      const item = action.payload;
+
+      return {
+        events:
+          state.events.map(event => event.id === action.id ? (
+          {...event, name: item.eventName, description: item.description, date: item.date}
+        ) : event)
+    }
+
+    default: return state
+}
 }

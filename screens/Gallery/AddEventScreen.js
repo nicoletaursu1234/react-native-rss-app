@@ -1,17 +1,48 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Button, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+
 import * as eventActions from '../../store/actions/events'
 import colors from '../../constants/colors'
+import AsyncStorage from '@react-native-community/async-storage';
 
 const AddEventScreen = props => {
-  const dispatch = useDispatch()
-  const selectedDate = props.route.params.selectedDate;
+  const dispatch = useDispatch();
 
-  const [date, setDate] = useState(selectedDate)
-  const [eventName, setEventName] = useState('')
-  const [description, setDescription] = useState('')
+  const params = props.route.params;
+  const selectedDate = params.selectedDate;
+  const eventDate = params.date;
+  const eventTitle = params.name;
+  const eventDescription = params.description;
+  const isEdit = params.isEdit;
+  const id = params.id;
 
+  const eventsList = useSelector(state => {
+    const eventsArr = []
+    for (const key in state.events.events) {
+      eventsArr.push({
+        id: state.events.events[key].id,
+        name: state.events.events[key].name,
+        description: state.events.events[key].description,
+        date: state.events.events[key].date
+      })
+    }
+    return eventsArr.sort((a, b) => a.id > b.id ? 1 : -1)
+  })
+
+  const [date, setDate] = useState(isEdit ? eventDate : selectedDate)
+  const [eventName, setEventName] = useState(isEdit ? eventTitle : '')
+  const [description, setDescription] = useState(isEdit ? eventDescription : '')
+ 
+
+  const handleAdd = () => {
+    if(!isEdit){
+      dispatch(eventActions.addEvent({eventName, description, date}));
+    } else {
+      dispatch(eventActions.updateEvent({eventName, description, date}, id));
+    }
+    props.navigation.goBack();
+  }
   return (
     <View style={styles.screen}>
       <View style={styles.container}>
@@ -31,17 +62,18 @@ const AddEventScreen = props => {
           placeholder='Description'
           multiline
         />
-        <Text style={styles.date}>Date: {selectedDate}</Text>
+        <Text style={styles.date}>Date: {date}</Text>
         <View style={styles.actions}>
           <Text
             style={styles.add}
-            onPress={() => {
-              dispatch(eventActions.addEvent({eventName, description, date}));
-              props.navigation.goBack();
-            }}>ADD</Text>
+            onPress={() => handleAdd()}>
+            ADD
+          </Text>
           <Text
             style={styles.cancel}
-            onPress={() => props.navigation.goBack()}>CANCEL</Text>
+            onPress={() => props.navigation.goBack()}>
+            CANCEL
+          </Text>
         </View>
 
       </View>
