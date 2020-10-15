@@ -46,8 +46,7 @@ const AddEvent = (props) => {
    
   const handleDayPress = (day) => {
     props.navigation.navigate('AddDateEvent', {
-      selectedDate: day.dateString,
-      setData: setData()
+      selectedDate: day.dateString
     });
   }
 

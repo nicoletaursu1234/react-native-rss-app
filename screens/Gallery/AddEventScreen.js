@@ -17,19 +17,6 @@ const AddEventScreen = props => {
   const isEdit = params.isEdit;
   const id = params.id;
 
-  const eventsList = useSelector(state => {
-    const eventsArr = []
-    for (const key in state.events.events) {
-      eventsArr.push({
-        id: state.events.events[key].id,
-        name: state.events.events[key].name,
-        description: state.events.events[key].description,
-        date: state.events.events[key].date
-      })
-    }
-    return eventsArr.sort((a, b) => a.id > b.id ? 1 : -1)
-  })
-
   const [date, setDate] = useState(isEdit ? eventDate : selectedDate)
   const [eventName, setEventName] = useState(isEdit ? eventTitle : '')
   const [description, setDescription] = useState(isEdit ? eventDescription : '')
