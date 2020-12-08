@@ -8,7 +8,7 @@ pipeline {
         }
     }
     post {
-        echo("Tratata");
+        echo "Tratata";
     }
 }
 
