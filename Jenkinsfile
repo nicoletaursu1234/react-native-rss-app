@@ -1,22 +1,11 @@
 pipeline {
-    agent any
+    agent {label "master"}
     stages {
         stage('build') {
             steps {
                 bat 'yarn start && yarn test'
+                echo "AAAAAAA"
             }
-        }
-    }
-    post {
-        success {
-             emailext body: 'SUCCESSFULL', 
-                 to:'nicoletaursu1234@gmail.com', 
-                 subject: 'Test'         
-        }
-        failure{
-            emailext body: 'FAILURE', 
-                 to:'nicoletaursu1234@gmail.com', 
-                 subject: 'Test' 
         }
     }
 }
