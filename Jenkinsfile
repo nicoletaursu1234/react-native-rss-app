@@ -8,16 +8,7 @@ pipeline {
         }
     }
     post {
-        success {
-             emailext body: 'SUCCESSFULL', 
-                 to:'nicoletaursu1234@gmail.com', 
-                 subject: 'Test'         
-        }
-        failure{
-            emailext body: 'FAILURE', 
-                 to:'nicoletaursu1234@gmail.com', 
-                 subject: 'Test' 
-        }
+        println("Tratata");
     }
 }
 
