@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                bat 'yarn start && yarn test'
+                sh 'yarn start && yarn test'
             }
         }
     }
