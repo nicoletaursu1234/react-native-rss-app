@@ -8,11 +8,6 @@ pipeline {
             }
         }
     }
-    post {
-        success {
-            echo "Tratata"
-        }
-    }
 }
 
 
