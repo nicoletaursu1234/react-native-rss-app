@@ -8,7 +8,7 @@ pipeline {
         }
     }
     post {
-        println("Tratata");
+        echo("Tratata");
     }
 }
 
