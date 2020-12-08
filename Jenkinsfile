@@ -8,7 +8,9 @@ pipeline {
         }
     }
     post {
-        echo "Tratata";
+        success {
+            echo "Tratata"
+        }
     }
 }
 
