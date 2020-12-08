@@ -3,8 +3,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                bat 'yarn start && yarn test'
-                echo "AAAAAAA"
+                bat 'npm install && npm start && npm run test'
             }
         }
     }
